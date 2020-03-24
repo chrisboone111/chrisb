@@ -1,0 +1,68 @@
+/*
+ * Lab02.c
+ *
+ * Created: 3/8/2020 3:48:11 PM
+ * Author : chris
+ */ 
+
+#include <avr/io.h>
+
+#include <avr/interrupt.h>
+
+unsigned char num[]={0x00, 0x00};
+uint8_t toggle = 0x00;
+uint8_t num1 = 0x5B;
+uint8_t num2 = 0x07;
+uint8_t num1c = 0x07;
+uint8_t num2c = 0x4F;
+
+int main(void)
+{
+	DDRD = 0xFF;
+	PORTD = 0x00;
+	DDRC = 0xFF;
+	PORTC = 0x03;
+	uint8_t firstNum2Display = 2;
+	uint8_t secondNum2Display = 7;
+	TCNT2   = 0;
+	TCCR2A |= (1 << WGM21); // Configure timer 2 for CTC mode
+	//TCCR2B = 0xff;
+	TCCR2B = 0x03;
+	TIMSK2 |= (1 << OCIE2A); // Enable CTC interrupt
+	OCR2A   = 250; // Set CTC compare value with a prescaler of 64
+
+	sei();
+	// enable interrupts
+	
+    /* Replace with your application code */
+    while (1) 
+    {
+	
+		if (toggle == 0x00){
+			PORTD = 0x5B;
+			//PORTD = 0x07;
+			PORTC = 0x01;
+		}
+		else{
+			PORTD = 0x07;
+			//PORTD = 0x4F;
+			PORTC = 0x02;
+		}
+		
+	
+
+
+    }
+}
+
+ISR (TIMER2_COMPA_vect)
+{
+	PORTC = 0x03;
+	toggle = ~toggle;
+
+
+
+	
+	
+}
+
